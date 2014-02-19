@@ -9,7 +9,7 @@ define sudo::conf(
   $ensure = present,
   $priority = 10,
   $content = undef,
-  $source = undef,
+  $source = undef
 ) {
 
   # sudo skipping file names that contain a "."
