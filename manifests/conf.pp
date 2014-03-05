@@ -16,7 +16,11 @@ define sudo::conf(
   $tname = regsubst($name, '\.', '-', 'G')
   $dname = "${priority}_${tname}"
 
-  if versioncmp($::sudoversion,'1.7.2') >= 0 {
+
+#  This version comparison was causing errors on some hosts.
+#  I think it relates to the version installed being 1.7.4p4 or 1.7.4p6
+#  (Emphasis on the p* bit)
+#  if versioncmp($::sudoversion,'1.7.2') >= 0 {
 
     file {"/etc/sudoers.d/${dname}":
       ensure  => $ensure,
@@ -38,11 +42,11 @@ define sudo::conf(
       require => Package['sudo'],
     }
 
-  } else {
-
-    fail "sudo fragments via #includedir is only available since version 1.7.2 in Sudo[${name}]!"
-
-  }
+#  } else {
+#
+#    fail "sudo fragments via #includedir is only available since version 1.7.2 in Sudo[${name}]!"
+#
+#  }
 
   exec {"sudo-syntax-check for file ${dname}":
     command     => "visudo -c -f '/etc/sudoers.d/${dname}' || ( rm -f '/etc/sudoers.d/${dname}' && exit 1)",
